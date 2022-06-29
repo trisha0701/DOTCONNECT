@@ -83,3 +83,13 @@ i{
   font-weight: 500;
   color: black;
 }
+.modal-content input[type=text]:focus{
+  border-bottom: 2px solid rgb(255, 5, 5) !important;
+}
+.collection-item{
+  width: 100%;
+}
+.scrollbar {
+  overflow-y: scroll;
+  max-height: 200px;
+}

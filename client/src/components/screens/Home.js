@@ -3,6 +3,7 @@ import { UserContext } from "../../App";
 import { Link } from "react-router-dom";
 
 const Home = () => {
+  const [userProfile, setProfile] = useState(null);
   const [data, setData] = useState([]);
   const { state, dispatch } = useContext(UserContext);
   useEffect(() => {
@@ -45,7 +46,6 @@ const Home = () => {
       .catch((err) => {
         console.log(err);
       });
-
   };
   const unlikePost = (id) => {
     fetch("/unlike", {
@@ -102,6 +102,7 @@ const Home = () => {
       .catch((err) => {
         console.log(err);
       });
+    document.getElementById("InputId").value = "";
   };
 
   const deletepost = (postid) => {
@@ -114,29 +115,36 @@ const Home = () => {
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
-        const newData = data.filter(item=>{
-          return item._id !== result._id
-        })
-        setData(newData)
+        const newData = data.filter((item) => {
+          return item._id !== result._id;
+        });
+        setData(newData);
       });
   };
-
-
 
   return (
     <div className="home">
       {data.map((item) => {
         return (
           <div className="card home-card" key={item._id}>
-            <h5 style={{padding:"2% 2% 2% 2%"}}>
-              <Link to ={item.postedBy._id !== state._id ? "/profile/"+item.postedBy._id :  "/profile" } style={{color:"black"}}>{item.postedBy.name}</Link>
+            <h5 style={{ padding: "2% 2% 2% 2%" }}>
+              <Link
+                to={
+                  item.postedBy._id !== state._id
+                    ? "/profile/" + item.postedBy._id
+                    : "/profile"
+                }
+                style={{ color: "black" }}
+              >
+                {item.postedBy.name}
+              </Link>
               {item.postedBy._id == state._id && (
                 <i
                   className="material-icons"
                   style={{
                     float: "right",
                   }}
-                  onClick={()=>deletepost(item._id)}
+                  onClick={() => deletepost(item._id)}
                 >
                   delete
                 </i>
@@ -176,25 +184,30 @@ const Home = () => {
               </h6>
               <h6>{item.title}</h6>
               <p>{item.body}</p>
-              <h6 style={{color:"grey"}}>comments</h6>
-              {item.comments.map((record) => {
-                return (
-                  <h6 key={record._id}>
-                  {/* <i className="material-icons" style={{color:"grey"}}>
-                  delete
-                  </i> */}
-                    <span className="bold">{record.postedBy.name} </span>{" "}
-                    {record.text} 
-                  </h6>
-                );
-              })}
+              <h6 style={{ color: "grey" }}>comments</h6>
+              <div className="scrollbar">
+                {item.comments.map((record) => {
+                  return (
+                    <h6 key={record._id}>
+                      <span className="bold">{record.postedBy.name} </span>{" "}
+                      {record.text}
+                    </h6>
+                  );
+                })}
+              </div>
               <form
                 onSubmit={(e) => {
                   e.preventDefault(); //to prevent the form from refreshing
                   makeComment(e.target[0].value, item._id);
                 }}
               >
-                <input type="text" placeholder="add a comment" />
+                <input id="InputId" type="text" placeholder="add a comment" />
+                <button
+                  className="btn waves-effect waves-light #ffcdd2 red lighten-1"
+                  onClick={(e) => {makeComment(e.target[0].value, item._id);document.getElementById("InputId").value=''}}
+                >
+                Comment
+                </button>
               </form>
             </div>
           </div>

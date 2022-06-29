@@ -7,6 +7,9 @@ const jwt = require('jsonwebtoken') //to generate a unique token when a user sig
 const {JWT_SECRET} = require('../config/keys')
 const requireLogin = require('../middleware/requireLogin')
 
+
+//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
+
 // the below one is for sign up
 router.post('/signup',(req,res)=>{
   const {name,email,password,pic} = req.body
